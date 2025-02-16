@@ -3,6 +3,12 @@ const historyList = document.getElementById('historyList');
 const calculateBtn = document.querySelector('.calculate-btn');
 const clearBtn = document.querySelector('button:not(.calculate-btn)');
 const exampleBtns = document.querySelectorAll('.example-btn');
+const themeSwitcher = document.getElementById('themeSwitcher');
+
+themeSwitcher.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    themeSwitcher.textContent = document.body.classList.contains('light-theme') ? 'Dark Mode' : 'Light Mode';
+});
 
 let calculationHistory = [];
 
@@ -10,6 +16,7 @@ let calculationHistory = [];
 exampleBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         resultDisplay.value = btn.textContent;
+        resultDisplay.placeholder = ''; // Clear the placeholder
     });
 });
 
@@ -35,6 +42,9 @@ async function calculate() {
         return;
     }
 
+    // Show loading spinner
+    document.getElementById('loadingSpinner').style.display = 'block';
+
     try {
         const response = await fetch('https://ee0ca92f-ed28-4d35-a25f-dad10cf4c57c-00-1w7ynweznqits.kirk.replit.dev/calculate', {
             method: 'POST',
@@ -55,11 +65,15 @@ async function calculate() {
     } catch (error) {
         console.error('Error fetching calculation:', error);
         resultDisplay.value = 'Network Error';
+    } finally {
+        // Hide loading spinner
+        document.getElementById('loadingSpinner').style.display = 'none';
     }
 }
 
 function clearDisplay() {
     resultDisplay.value = '';
+    resultDisplay.placeholder = 'Enter calculation...'; // Reset placeholder
 }
 
 function addToHistory(expression, result) {
