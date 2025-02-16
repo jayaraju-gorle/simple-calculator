@@ -7,12 +7,6 @@ async function calculate() {
         return;
     }
 
-    // Optional: Validate expression (e.g., allow only numbers and operators)
-    if (!/^[\d+\-*/().\s]+$/.test(expression)) {
-        alert('Invalid characters in the expression.');
-        return;
-    }
-
     try {
         const result = await fetchCalculation(expression);
         resultDisplay.value = result; // Update the display with the result
