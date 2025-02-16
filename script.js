@@ -1,17 +1,30 @@
 const resultDisplay = document.getElementById('result');
 
 async function calculate() {
-    const expression = resultDisplay.value;  // Get the text from the input
-    if (!expression) return; // Do nothing if the input is empty
+    const expression = resultDisplay.value.trim(); // Trim whitespace
+    if (!expression) {
+        alert('Please enter a valid expression.'); // Notify the user
+        return;
+    }
 
-    const result = await fetchCalculation(expression);
-    resultDisplay.value = result; // Update the display with the result
+    // Optional: Validate expression (e.g., allow only numbers and operators)
+    if (!/^[\d+\-*/().\s]+$/.test(expression)) {
+        alert('Invalid characters in the expression.');
+        return;
+    }
+
+    try {
+        const result = await fetchCalculation(expression);
+        resultDisplay.value = result; // Update the display with the result
+    } catch (error) {
+        console.error('Error during calculation:', error);
+        resultDisplay.value = 'Error'; // Show error to the user
+    }
 }
 
 function clearDisplay() {
     resultDisplay.value = ''; // Clear the input field
 }
-
 
 async function fetchCalculation(expression) {
     try {
@@ -25,14 +38,12 @@ async function fetchCalculation(expression) {
 
         const data = await response.json();
         if (response.ok) {
-            return data.result;
+            return data.result || 'No result returned'; // Handle missing result
         } else {
-            return data.error || 'Calculation Error';
+            return data.error || 'Calculation Error'; // Handle server-side errors
         }
     } catch (error) {
         console.error('Error fetching calculation:', error);
-        return 'Error';
+        return 'Network Error'; // Handle network errors
     }
 }
-
-// No need for updateDisplay() as we're directly updating the input field
