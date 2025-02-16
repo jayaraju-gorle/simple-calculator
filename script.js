@@ -1,14 +1,8 @@
 const resultDisplay = document.getElementById('result');
 const historyList = document.getElementById('historyList');
 const calculateBtn = document.querySelector('.calculate-btn');
-const clearBtn = document.querySelector('button:not(.calculate-btn)');
+const clearBtn = document.getElementById('clearBtn'); // Updated to target by ID
 const exampleBtns = document.querySelectorAll('.example-btn');
-const themeSwitcher = document.getElementById('themeSwitcher');
-
-themeSwitcher.addEventListener('click', () => {
-    document.body.classList.toggle('light-theme');
-    themeSwitcher.textContent = document.body.classList.contains('light-theme') ? 'Dark Mode' : 'Light Mode';
-});
 
 let calculationHistory = [];
 
@@ -24,7 +18,7 @@ exampleBtns.forEach(btn => {
 calculateBtn.addEventListener('click', calculate);
 
 // Handle clear button
-clearBtn.addEventListener('click', clearDisplay);
+clearBtn.addEventListener('click', clearDisplay); // Ensure event listener is added
 
 // Handle keyboard shortcuts
 document.addEventListener('keydown', (e) => {
@@ -41,9 +35,6 @@ async function calculate() {
         alert('Please enter a calculation');
         return;
     }
-
-    // Show loading spinner
-    document.getElementById('loadingSpinner').style.display = 'block';
 
     try {
         const response = await fetch('https://ee0ca92f-ed28-4d35-a25f-dad10cf4c57c-00-1w7ynweznqits.kirk.replit.dev/calculate', {
@@ -65,14 +56,11 @@ async function calculate() {
     } catch (error) {
         console.error('Error fetching calculation:', error);
         resultDisplay.value = 'Network Error';
-    } finally {
-        // Hide loading spinner
-        document.getElementById('loadingSpinner').style.display = 'none';
     }
 }
 
 function clearDisplay() {
-    resultDisplay.value = '';
+    resultDisplay.value = ''; // Clear the input field
     resultDisplay.placeholder = 'Enter calculation...'; // Reset placeholder
 }
 
