@@ -201,22 +201,49 @@ body.light-theme .example-btn {
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
+/* Light mode styles */
 body.light-theme .recent-calculations {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+body.light-theme .recent-calculations h3 {
+    color: #333; /* Ensure heading is visible in light mode */
+}
+
 body.light-theme .history-item {
     background-color: rgba(0, 0, 0, 0.1);
-    color: #333;
+    color: #333; /* Ensure text is visible in light mode */
 }
 
 h1 {
-    color: white;
+    color: white; /* Ensure title is visible in dark mode */
     font-size: 24px;
     margin-bottom: 20px;
     text-align: center;
 }
 
 body.light-theme h1 {
-    color: #333;
+    color: #333; /* Ensure title is visible in light mode */
+}
+
+.recent-calculations {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.recent-calculations h3 {
+    color: white; /* Ensure heading is visible in dark mode */
+    margin-bottom: 10px;
+    font-size: 16px;
+    opacity: 0.8;
+}
+
+.history-item {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 14px;
+    color: white; /* Ensure text is visible in dark mode */
 }
