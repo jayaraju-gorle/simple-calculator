@@ -140,7 +140,7 @@ button:not(.calculate-btn):hover {
 }
 
 .loading-spinner {
-    display: none;
+    display: none; /* Hidden by default */
     position: absolute;
     top: 50%;
     right: 15px;
@@ -207,5 +207,16 @@ body.light-theme .recent-calculations {
 
 body.light-theme .history-item {
     background-color: rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+h1 {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+body.light-theme h1 {
     color: #333;
 }

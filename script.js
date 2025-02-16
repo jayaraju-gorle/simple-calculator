@@ -3,8 +3,15 @@ const historyList = document.getElementById('historyList');
 const calculateBtn = document.querySelector('.calculate-btn');
 const clearBtn = document.getElementById('clearBtn'); // Updated to target by ID
 const exampleBtns = document.querySelectorAll('.example-btn');
+const themeSwitcher = document.getElementById('themeSwitcher');
 
 let calculationHistory = [];
+
+themeSwitcher.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    const isLightTheme = document.body.classList.contains('light-theme');
+    themeSwitcher.textContent = isLightTheme ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+});
 
 // Handle example buttons
 exampleBtns.forEach(btn => {
@@ -36,6 +43,9 @@ async function calculate() {
         return;
     }
 
+    // Show loading spinner
+    document.getElementById('loadingSpinner').style.display = 'block';
+
     try {
         const response = await fetch('https://ee0ca92f-ed28-4d35-a25f-dad10cf4c57c-00-1w7ynweznqits.kirk.replit.dev/calculate', {
             method: 'POST',
@@ -56,6 +66,9 @@ async function calculate() {
     } catch (error) {
         console.error('Error fetching calculation:', error);
         resultDisplay.value = 'Network Error';
+    } finally {
+        // Hide loading spinner
+        document.getElementById('loadingSpinner').style.display = 'none';
     }
 }
 
