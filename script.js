@@ -1,77 +1,25 @@
 const resultDisplay = document.getElementById('result');
-const loadingSpinner = document.getElementById('loadingSpinner');
 const historyList = document.getElementById('historyList');
-const themeToggle = document.getElementById('themeToggle');
-const copyButton = document.getElementById('copyButton');
+const calculateBtn = document.querySelector('.calculate-btn');
+const clearBtn = document.querySelector('button:not(.calculate-btn)');
+const exampleBtns = document.querySelectorAll('.example-btn');
 
-// Theme handling
-let isDarkMode = true;
-function toggleTheme() {
-    isDarkMode = !isDarkMode;
-    document.body.classList.toggle('light-mode');
-    themeToggle.innerHTML = isDarkMode ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-}
-
-// History handling
 let calculationHistory = [];
-function addToHistory(expression, result) {
-    calculationHistory.unshift({ expression, result });
-    if (calculationHistory.length > 5) calculationHistory.pop();
-    updateHistoryDisplay();
-}
 
-function updateHistoryDisplay() {
-    historyList.innerHTML = calculationHistory
-        .map(calc => `<div class="history-item">
-            <span>${calc.expression}</span>
-            <span>=</span>
-            <span>${calc.result}</span>
-        </div>`)
-        .join('');
-}
-
-// Copy result
-function copyResult() {
-    navigator.clipboard.writeText(resultDisplay.value);
-    copyButton.innerHTML = '<i class="fas fa-check"></i>';
-    setTimeout(() => {
-        copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-    }, 2000);
-}
-
-// Example buttons
-document.querySelectorAll('.example-btn').forEach(btn => {
+// Handle example buttons
+exampleBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         resultDisplay.value = btn.textContent;
     });
 });
 
-async function calculate() {
-    const expression = resultDisplay.value.trim();
-    if (!expression) {
-        alert('Please enter a valid expression.');
-        return;
-    }
+// Handle calculate button
+calculateBtn.addEventListener('click', calculate);
 
-    loadingSpinner.classList.remove('hidden');
-    
-    try {
-        const result = await fetchCalculation(expression);
-        resultDisplay.value = result;
-        addToHistory(expression, result);
-    } catch (error) {
-        console.error('Error during calculation:', error);
-        resultDisplay.value = 'Error';
-    } finally {
-        loadingSpinner.classList.add('hidden');
-    }
-}
+// Handle clear button
+clearBtn.addEventListener('click', clearDisplay);
 
-function clearDisplay() {
-    resultDisplay.value = '';
-}
-
-// Keyboard shortcuts
+// Handle keyboard shortcuts
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         calculate();
@@ -80,4 +28,52 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Your existing fetchCalculation function remains the same
+async function calculate() {
+    const expression = resultDisplay.value.trim();
+    if (!expression) {
+        alert('Please enter a calculation');
+        return;
+    }
+
+    try {
+        const response = await fetch('https://ee0ca92f-ed28-4d35-a25f-dad10cf4c57c-00-1w7ynweznqits.kirk.replit.dev/calculate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ expression })
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            const result = data.result || 'No result returned';
+            resultDisplay.value = result;
+            addToHistory(expression, result);
+        } else {
+            resultDisplay.value = data.error || 'Calculation Error';
+        }
+    } catch (error) {
+        console.error('Error fetching calculation:', error);
+        resultDisplay.value = 'Network Error';
+    }
+}
+
+function clearDisplay() {
+    resultDisplay.value = '';
+}
+
+function addToHistory(expression, result) {
+    calculationHistory.unshift({ expression, result });
+    if (calculationHistory.length > 5) calculationHistory.pop();
+    updateHistoryDisplay();
+}
+
+function updateHistoryDisplay() {
+    historyList.innerHTML = calculationHistory
+        .map(calc => `
+            <div class="history-item">
+                ${calc.expression} = ${calc.result}
+            </div>
+        `)
+        .join('');
+}
