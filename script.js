@@ -5,7 +5,7 @@ let shouldResetScreen = false;
 
 const resultDisplay = document.getElementById('result');
 
-function appendNumber(number) {
+async function appendNumber(number) {
     if (shouldResetScreen) {
         currentInput = '';
         shouldResetScreen = false;
@@ -17,11 +17,11 @@ function appendNumber(number) {
     updateDisplay();
 }
 
-function appendOperator(op) {
+async function appendOperator(op) {
     if (currentInput === '') return;
     
     if (previousInput !== '') {
-        calculate();
+        await calculate();
     }
     
     operation = op;
@@ -29,36 +29,13 @@ function appendOperator(op) {
     currentInput = '';
 }
 
-function calculate() {
+async function calculate() {
     if (previousInput === '' || currentInput === '') return;
     
-    let result;
-    const prev = parseFloat(previousInput);
-    const current = parseFloat(currentInput);
+    const expression = `${previousInput} ${operation} ${currentInput}`;
+    const result = await fetchCalculation(expression);
     
-    switch (operation) {
-        case '+':
-            result = prev + current;
-            break;
-        case '-':
-            result = prev - current;
-            break;
-        case '*':
-            result = prev * current;
-            break;
-        case '/':
-            if (current === 0) {
-                alert('Cannot divide by zero');
-                clearDisplay();
-                return;
-            }
-            result = prev / current;
-            break;
-        default:
-            return;
-    }
-    
-    currentInput = result.toString();
+    currentInput = result;
     operation = null;
     previousInput = '';
     shouldResetScreen = true;
@@ -74,6 +51,24 @@ function clearDisplay() {
 
 function updateDisplay() {
     resultDisplay.value = currentInput;
+}
+
+async function fetchCalculation(expression) {
+    try {
+        const response = await fetch('https://ee0ca92f-ed28-4d35-a25f-dad10cf4c57c-00-1w7ynweznqits.kirk.replit.dev/calculate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ expression })
+        });
+        
+        const data = await response.json();
+        return data.result;
+    } catch (error) {
+        console.error('Error fetching calculation:', error);
+        return 'Error';
+    }
 }
 
 updateDisplay();
