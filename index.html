@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Calculator</title>  <!-- Changed title -->
+    <title>AI Calculator</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Google Font (Open Sans) -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="calculator">
         <div class="display">
-            <input type="text" id="result" placeholder="Enter your calculation (e.g., '2 plus 3')"> <!-- Added placeholder -->
-        </div>
+            <input type="text" id="result" placeholder="Enter calculation...">  </div>
         <div class="buttons">
-            <button onclick="calculate()">Calculate</button>
+            <button class="calculate-btn" onclick="calculate()">Calculate</button>
             <button onclick="clearDisplay()">Clear</button>
         </div>
     </div>
