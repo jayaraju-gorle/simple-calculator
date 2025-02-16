@@ -5,16 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Calculator</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Google Font (Open Sans) -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="calculator">
+        <!-- Add theme toggle -->
+        <div class="theme-toggle">
+            <button id="themeToggle"><i class="fas fa-moon"></i></button>
+        </div>
+        
+        <!-- Add examples section -->
+        <div class="examples">
+            <p>Try these:</p>
+            <div class="example-buttons">
+                <button class="example-btn">what is 5 plus 7</button>
+                <button class="example-btn">square root of 16</button>
+                <button class="example-btn">15% of 200</button>
+            </div>
+        </div>
+
         <div class="display">
-            <input type="text" id="result" placeholder="Enter calculation...">  </div>
+            <input type="text" id="result" placeholder="Enter calculation...">
+            <!-- Add copy button -->
+            <button id="copyButton" class="copy-btn"><i class="fas fa-copy"></i></button>
+        </div>
+
+        <!-- Add loading spinner -->
+        <div id="loadingSpinner" class="loading-spinner hidden">
+            <i class="fas fa-spinner fa-spin"></i>
+        </div>
+
         <div class="buttons">
             <button class="calculate-btn" onclick="calculate()">Calculate</button>
             <button onclick="clearDisplay()">Clear</button>
+        </div>
+
+        <!-- Add history section -->
+        <div class="history" id="history">
+            <h3>Recent Calculations</h3>
+            <div id="historyList"></div>
         </div>
     </div>
     <script src="script.js"></script>
