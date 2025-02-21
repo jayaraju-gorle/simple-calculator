@@ -47,7 +47,7 @@ async function calculate() {
     document.getElementById('loadingSpinner').style.display = 'block';
 
     try {
-        const response = await fetch('https://ai-tool-86d410eeb101.herokuapp.com/calculate', {
+        const response = await fetch('https://ai-tools-backend-772545827002.asia-south1.run.app/calculate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
